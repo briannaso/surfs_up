@@ -1,8 +1,9 @@
 # 1. import Flask / dependencies
 import datetime as dt
 from flask.globals import session
+from sqlalchemy.sql.operators import json_getitem_op
 
-from werkzeug.exceptions import RequestHeaderFieldsTooLarge
+from werkzeug.exceptions import RequestHeaderFieldsTooLarge, RequestURITooLarge
 import numpy as np
 import pandas as pd
 
@@ -28,15 +29,6 @@ session = Session(engine)
 # Create an app, being sure to pass __name__
 app = Flask(__name__)
 
-#import app
-
-print("example __name__ = %s", __name__)
-
-if __name__ == "__main__":
-    print("example is being run directly.")
-else:
-    print("example is being imported")
-
 # 3. Define what to do when a user goes to the index route
 @app.route("/")
 def welcome():
@@ -49,10 +41,7 @@ def welcome():
     /api/v1.0/tobs
     /api/v1.0/temp/start/end
     ''')
-
-if __name__ == '__main__':
-    app.run(debug=True)
-
+    
 @app.route("/api/v1.0/precipitation")
 def precipitation():
    prev_year = dt.date(2017, 8, 23) - dt.timedelta(days=365)
@@ -60,3 +49,39 @@ def precipitation():
     filter(Measurement.date >= prev_year).all()
    precip = {date: prcp for date, prcp in precipitation}
    return jsonify(precip)
+
+@app.route("/api/v1.0/stations")
+def stations():
+    results = session.query(Station.station).all()
+    stations = list(np.ravel(results))
+    return jsonify(stations=stations)
+
+
+@app.route("/api/v1.0/tobs")
+def temp_monthly():
+    prev_year = dt.date(2017, 8, 23) - dt.timedelta(days=365)
+    results = session.query(Measurement.tobs).\
+      filter(Measurement.station == 'USC00519281').\
+      filter(Measurement.date >= prev_year).all()
+    temps = list(np.ravel(results))
+    return jsonify(temps=temps)
+
+@app.route("/api/v1.0/temp/<start>")
+@app.route("/api/v1.0/temp/<start>/<end>")
+def stats(start=None, end=None):
+    sel = [func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)]
+
+    if not end:
+        results = session.query(*sel).\
+            filter(Measurement.date >= start).all()
+        temps = list(np.ravel(results))
+        return jsonify(temps)
+
+    results = session.query(*sel).\
+        filter(Measurement.date >= start).\
+        filter(Measurement.date <= end).all()
+    temps = list(np.ravel(results))
+    return jsonify(temps)
+
+if __name__ == '__main__':
+    app.run(debug=True)
