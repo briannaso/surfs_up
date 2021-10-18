@@ -32,12 +32,19 @@ To see how low temperatures may fall, we completed a query on January temperatur
 #### Dive into January & May
 #### January
 <img width="180" alt="jan_stats" src="https://user-images.githubusercontent.com/88520573/137650060-db37dee9-91d3-4104-b115-ca353a3a56b0.png">
+
 #### May
 <img width="180" alt="may_stats" src="https://user-images.githubusercontent.com/88520573/137650063-49b9c326-8fca-40e8-be5b-842e8226ee7e.png">
 
 In a second comparison, we also took a look at temperatures in May where temperatures seem to pick up at an average temperature of 73 degrees but may have the highest temperatures reached at 87 degrees. When looking at the overall year, Hawaii temperature stay primarily in ranges between 70 and 80 degrees. The most frequent temperature is 70 to 77 degrees all year round which is pleasant weather for all surfers. 
+
 <img width="172" alt="overall_stats" src="https://user-images.githubusercontent.com/88520573/137649814-e24f814b-94d9-4f69-af9c-a53ca89749e8.png">
-![Yearly_Avg_Temps](https://user-images.githubusercontent.com/88520573/137649827-5efcfd5f-fb6d-4e51-acc6-672783b5f93b.png)
+
+Average Temperatures
+
+
+![Yearly_Avg_Temps](https://user-images.githubusercontent.com/88520573/137650253-5297b984-d2f3-4f2c-a4e8-5d2c33fbebf6.png)
+
 
 
 
